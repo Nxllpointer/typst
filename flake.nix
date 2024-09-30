@@ -60,10 +60,17 @@
             pkgs.darwin.apple_sdk.frameworks.CoreServices
             pkgs.libiconv
           ]);
-
-          nativeBuildInputs = [
-            pkgs.pkg-config
-            pkgs.openssl.dev
+          nativeBuildInputs = with pkgs; [
+            pkg-config
+            openssl.dev
+            alsa-lib
+            glib.dev
+            appstream
+            glib
+            gtk4
+            libadwaita
+            libxml2
+            poppler
           ];
         };
 
@@ -127,7 +134,7 @@
           checks = self'.checks;
           inputsFrom = [ typst ];
 
-          packages = [
+          packages = with pkgs; [
             # A script for quickly running tests.
             # See https://github.com/typst/typst/blob/main/tests/README.md#making-an-alias
             (pkgs.writeShellScriptBin "testit" ''
