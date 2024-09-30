@@ -1,6 +1,7 @@
 //! Image handling.
 
 mod raster;
+mod rnote;
 mod svg;
 
 pub use self::raster::{RasterFormat, RasterImage};
@@ -292,6 +293,7 @@ fn determine_format(path: &str, data: &Readable) -> StrResult<ImageFormat> {
         "jpg" | "jpeg" => ImageFormat::Raster(RasterFormat::Jpg),
         "gif" => ImageFormat::Raster(RasterFormat::Gif),
         "svg" | "svgz" => ImageFormat::Vector(VectorFormat::Svg),
+        "rnote" => ImageFormat::Vector(VectorFormat::Rnote),
         _ => match &data {
             Readable::Str(_) => ImageFormat::Vector(VectorFormat::Svg),
             Readable::Bytes(bytes) => match RasterFormat::detect(bytes) {
@@ -363,9 +365,10 @@ impl Image {
             ImageFormat::Raster(format) => {
                 ImageKind::Raster(RasterImage::new(data, format)?)
             }
-            ImageFormat::Vector(VectorFormat::Svg) => {
-                ImageKind::Svg(SvgImage::new(data)?)
-            }
+            ImageFormat::Vector(format) => match format {
+                VectorFormat::Svg => ImageKind::Svg(SvgImage::new(data)?),
+                VectorFormat::Rnote => ImageKind::Svg(rnote::export_as_svg(data)?),
+            },
         };
 
         Ok(Self(Arc::new(LazyHash::new(Repr { kind, alt }))))
@@ -385,9 +388,12 @@ impl Image {
             ImageFormat::Raster(format) => {
                 ImageKind::Raster(RasterImage::new(data, format)?)
             }
-            ImageFormat::Vector(VectorFormat::Svg) => {
-                ImageKind::Svg(SvgImage::with_fonts(data, world, families)?)
-            }
+            ImageFormat::Vector(format) => match format {
+                VectorFormat::Svg => {
+                    ImageKind::Svg(SvgImage::with_fonts(data, world, families)?)
+                }
+                VectorFormat::Rnote => ImageKind::Svg(rnote::export_as_svg(data)?),
+            },
         };
 
         Ok(Self(Arc::new(LazyHash::new(Repr { kind, alt }))))
@@ -469,6 +475,7 @@ pub enum ImageFormat {
 pub enum VectorFormat {
     /// The vector graphics format of the web.
     Svg,
+    Rnote,
 }
 
 impl From<RasterFormat> for ImageFormat {
