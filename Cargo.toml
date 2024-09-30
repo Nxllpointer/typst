@@ -126,6 +126,15 @@ xmp-writer = "0.2"
 xz2 = "0.1"
 yaml-front-matter = "0.1"
 zip = { version = "0.6", default-features = false, features = ["deflate"] }
+rnote-engine = { git = "https://github.com/flxzt/rnote.git", ref = "v0.11.0" }
+tokio = { version = "1.40.0", features = ["rt-multi-thread", "macros"] }
+
+[patch.crates-io]
+# Patches inherited from rnote
+piet = { git = "https://github.com/flxzt/piet", rev = "17fd59f260db3c54029a8288178e32f9f1742be2" }
+piet-cairo = { git = "https://github.com/flxzt/piet", rev = "17fd59f260db3c54029a8288178e32f9f1742be2" }
+roughr = { git = "https://github.com/orhanbalci/rough-rs", rev = "0701ce0b874061707ef726533b43e1806af8b666" }
+rough_piet = { git = "https://github.com/orhanbalci/rough-rs", rev = "0701ce0b874061707ef726533b43e1806af8b666" }
 
 [profile.dev.package."*"]
 opt-level = 2

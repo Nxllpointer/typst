@@ -1241,6 +1241,7 @@ fn convert_image_to_base64_url(image: &Image) -> EcoString {
         },
         ImageFormat::Vector(f) => match f {
             VectorFormat::Svg => "svg+xml",
+            VectorFormat::Rnote => "rnote",
         },
     };
 

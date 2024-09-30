@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     crane = {
       url = "github:ipetkov/crane";
@@ -56,10 +56,18 @@
                 pkgs.openssl
               ];
 
-              nativeBuildInputs = [
-                pkgs.installShellFiles
-                pkgs.pkg-config
-                pkgs.openssl.dev
+              nativeBuildInputs = with pkgs; [
+                installShellFiles
+                pkg-config
+                openssl.dev
+                alsa-lib
+                glib.dev
+                appstream
+                glib
+                gtk4
+                libadwaita
+                libxml2
+                poppler
               ];
             };
 
@@ -118,9 +126,17 @@
             pkgs.openssl
           ];
 
-          nativeBuildInputs = [
-            pkgs.pkg-config
-            pkgs.openssl.dev
+          nativeBuildInputs = with pkgs; [
+            pkg-config
+            openssl.dev
+            alsa-lib
+            glib.dev
+            appstream
+            glib
+            gtk4
+            libadwaita
+            libxml2
+            poppler
           ];
         };
       };
