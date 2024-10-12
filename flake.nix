@@ -20,6 +20,20 @@
 
     imports = [
       inputs.flake-parts.flakeModules.easyOverlay
+      ({ lib, flake-parts-lib, ... }: flake-parts-lib.mkTransposedPerSystemModule {
+        name = "craneLib";
+        option = lib.mkOption {
+          type = lib.types.attrs;
+        };
+        file = ./flake.nix;
+      })
+      ({ lib, flake-parts-lib, ... }: flake-parts-lib.mkTransposedPerSystemModule {
+        name = "dependencies";
+        option = lib.mkOption {
+          type = lib.types.attrs;
+        };
+        file = ./flake.nix;
+      })
     ];
 
     perSystem = { self', pkgs, lib, system, ... }:
@@ -49,17 +63,14 @@
           ];
         };
 
-        # Typst derivation's args, used within crane's derivation generation
-        # functions.
-        commonCraneArgs = {
-          inherit src pname version;
-
+        dependencies = {
           buildInputs = [
             pkgs.openssl
           ] ++ (lib.optionals pkgs.stdenv.isDarwin [
             pkgs.darwin.apple_sdk.frameworks.CoreServices
             pkgs.libiconv
           ]);
+
           nativeBuildInputs = with pkgs; [
             pkg-config
             openssl.dev
@@ -73,6 +84,12 @@
             poppler
           ];
         };
+
+        # Typst derivation's args, used within crane's derivation generation
+        # functions.
+        commonCraneArgs = {
+          inherit src pname version;
+        } // dependencies;
 
         # Derivation with just the dependencies, so we don't have to keep
         # re-building them.
@@ -104,6 +121,8 @@
         });
       in
       {
+        inherit craneLib dependencies;
+
         formatter = pkgs.nixpkgs-fmt;
 
         packages = {
