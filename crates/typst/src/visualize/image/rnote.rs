@@ -9,7 +9,7 @@ use crate::{diag::StrResult, foundations::Bytes, visualize::SvgImage};
 
 const RNOTE_LOGO: &[u8] = include_bytes!("rnote-logo.svg");
 
-#[tokio::main]
+#[pollster::main]
 #[comemo::memoize]
 pub async fn export_as_svg(data: Bytes) -> StrResult<SvgImage> {
     let mut engine = Engine::default();
