@@ -64,6 +64,14 @@
           nativeBuildInputs = [
             pkgs.pkg-config
             pkgs.openssl.dev
+            pkgs.alsa-lib
+            pkgs.glib.dev
+            pkgs.appstream
+            pkgs.glib
+            pkgs.gtk4
+            pkgs.libadwaita
+            pkgs.libxml2
+            pkgs.poppler
           ];
         };
 
