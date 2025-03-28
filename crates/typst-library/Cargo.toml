@@ -66,6 +66,8 @@ unscanny = { workspace = true }
 usvg = { workspace = true }
 wasmi = { workspace = true }
 xmlwriter = { workspace = true }
+rnote-engine = { workspace = true }
+pollster = { workspace = true }
 
 [dev-dependencies]
 typst-dev-assets = { workspace = true }

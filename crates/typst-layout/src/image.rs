@@ -67,6 +67,9 @@ pub fn layout_image(
             )
             .at(span)?,
         ),
+        ImageFormat::Vector(VectorFormat::Rnote) => {
+            ImageKind::Svg(SvgImage::from_rnote(data.clone()).at(span)?)
+        }
     };
 
     let image = Image::new(kind, elem.alt(styles), elem.scaling(styles));
@@ -147,6 +150,7 @@ fn determine_format(source: &DataSource, data: &Bytes) -> StrResult<ImageFormat>
             "jpg" | "jpeg" => return Ok(ExchangeFormat::Jpg.into()),
             "gif" => return Ok(ExchangeFormat::Gif.into()),
             "svg" | "svgz" => return Ok(VectorFormat::Svg.into()),
+            "rnote" => return Ok(VectorFormat::Rnote.into()),
             _ => {}
         }
     }

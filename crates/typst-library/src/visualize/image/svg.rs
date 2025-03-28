@@ -65,6 +65,11 @@ impl SvgImage {
         Ok(Self(Arc::new(Repr { data, size: tree_size(&tree), font_hash, tree })))
     }
 
+    #[comemo::memoize]
+    pub fn from_rnote(data: Bytes) -> StrResult<SvgImage> {
+        pollster::block_on(super::rnote::export_as_svg(data))
+    }
+
     /// The raw image data.
     pub fn data(&self) -> &Bytes {
         &self.0.data

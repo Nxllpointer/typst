@@ -1,6 +1,7 @@
 //! Image handling.
 
 mod raster;
+mod rnote;
 mod svg;
 
 pub use self::raster::{
@@ -426,6 +427,7 @@ fn is_svg(data: &[u8]) -> bool {
 pub enum VectorFormat {
     /// The vector graphics format of the web.
     Svg,
+    Rnote
 }
 
 impl<R> From<R> for ImageFormat
